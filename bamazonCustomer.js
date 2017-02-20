@@ -7,6 +7,26 @@ var connection = mysql.createConnection({
 	database: "bamazon_db"
 });
 var orders = [];
+var ordernum = [];
+var num =0;
+function askOrder(){
+	num++	
+	inquirer.prompt([
+		{
+			type: "prompt",
+			message: "How much of product "+ num +" would you like to buy?",
+			name: "num"
+		}
+		]).then(function(user){
+			if (ordernum.length +1 <orders.length){
+				ordernum.push(user.num)
+				askOrder();
+			}else{
+				console.log(orders);
+			}
+		});		
+
+}
 connection.connect(function(err) {
   if (err) {
     console.error('error connecting: ' + err.stack);
@@ -28,18 +48,10 @@ connection.query('SELECT * FROM products', function (error, results, fields) {
 		}
 	]).then(function(user){
 		var input = user.order
-		input.forEach(function(element){
-			inquirer.prompt([
-				{
-					type: "prompt",
-					message: "How many of"+element+"would you like to buy?",
-					name: "num"
-				}
-			]).then(function(user){
-				console.log(user.num);
-
-		});		
+	input.forEach(function(element){
+		orders.push(element);
 		});
-		});
+	askOrder();
+	});
   }
 });
