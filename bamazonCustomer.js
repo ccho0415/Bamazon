@@ -6,9 +6,21 @@ var connection = mysql.createConnection({
 	password: "catbutt1234",
 	database: "bamazon_db"
 });
+var products = ["None", "I'm Done"];
 var orders = [];
 var prices = [];
 var total = 0;
+function loadProducts(){
+	connection.query("SELECT*FROM products", function(error, results, fields){
+		if (error) throw erro;
+		else if(results){
+			results.forEach(function(element){
+				products.push(element.product_name);
+			});
+			askOrder();
+		}
+	});
+}
 function Order(order,num){
 	this.order=order,
 	this.num=num
@@ -18,7 +30,7 @@ function askOrder(){
 		{
 			type:"list",
 			message: "Welcome to the Cattery! What would you like to order today?",
-			choices: ["Meow Mix","Blue Buffalo Cat", "Hills Science", "Fancy Feast", "Purina", "Bengal", "Tabby", "Scottish Fold", "Scratcher Toy", "Feather Wand", "Interactive Pet Paly Toy", "Cat Dancer", "Catit Senses 2.0 Digger for Cats","None","I'm Done"],
+			choices: products,
 			name: "order"
 		},
 		{
@@ -86,7 +98,6 @@ connection.connect(function(err) {
 connection.query('SELECT * FROM products', function (error, results, fields) {
   if (error) throw error;
   else if(results){
-  	console.log(results);
-  	askOrder();
+  	loadProducts();
   }
 });
