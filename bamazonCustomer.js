@@ -12,7 +12,7 @@ var prices = [];
 var total = 0;
 function loadProducts(){
 	connection.query("SELECT*FROM products", function(error, results, fields){
-		if (error) throw erro;
+		if (error) throw error;
 		else if(results){
 			results.forEach(function(element){
 				products.push(element.product_name);
