@@ -9,6 +9,10 @@ var connection = mysql.createConnection({
 var orders = [];
 var ordernum = [];
 var num =0;
+function Order(order,num){
+	this.order=order,
+	this.num=num
+}
 function askOrder(){
 	num++	
 	inquirer.prompt([
@@ -48,10 +52,11 @@ connection.query('SELECT * FROM products', function (error, results, fields) {
 		}
 	]).then(function(user){
 		var input = user.order
-	input.forEach(function(element){
-		orders.push(element);
+		input.forEach(function(element){
+			orders.push(element);
 		});
-	askOrder();
+		askOrder();
+		var orderData = new Order()
 	});
   }
 });
